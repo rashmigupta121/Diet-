@@ -1,0 +1,109 @@
+﻿@model List<Diet_Project1.Models.internship>
+
+@{
+    ViewBag.Title = "InternshipDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Internship Details</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Batch</th>
+                                    <th>Semester</th>
+                                    <th>School Catagory</th>
+                                    <th>Open Panel For Students</th>
+                                    <th>Apply Before Date</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>School Capacity</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int serialNumber = 1; // Initialize the serial number counter
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th>@serialNumber</th>
+                                        <td>@item.batch</td>
+                                        <td>@item.semester</td>
+                                        <td>@item.school_category</td>
+                                        <td>@item.panel_open</td>
+                                        <td>@item.apply_date</td>
+                                        <td>@item.start_date</td>
+                                        <td>@item.end_date</td>
+                                        <td>@item.school_capacity</td>
+                                        <td>
+                                            <a href="/diet/AddInternship?internship_id=@(item.internship_id)" title="edit"><i class="fas fa-edit" style="color: #28a745"></i></a>
+                                            <a href="#" class="delete-internship" data-internship-id="@item.internship_id" title="delete"><i class="fas fa-regular fa-trash" style="color:red"></i></a>
+                                        </td>
+                                    </tr>
+                                    { serialNumber++; }// Increment the serial number after each row
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<script>
+    $(document).ready(function () {
+        // Add a click event handler to the delete button with the class "delete-internship"
+        $('.delete-internship').click(function (e) {
+            e.preventDefault();
+
+            // Get the internship ID from the data attribute
+            var internshipId = $(this).data('internship-id');
+
+            // Show a confirmation dialog using Swal
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user clicks "Yes," proceed with the deletion
+                    window.location.href = '/diet/delete_Internship?internship_id=' + internshipId;
+                }
+            });
+        });
+    });
+</script>

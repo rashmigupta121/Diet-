@@ -1,0 +1,382 @@
+﻿@model Diet_Project1.Models.student
+
+@{
+    ViewBag.Title = "diet-StudentRegistration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+
+    .col-md-2 {
+        margin: 15px;
+    }
+
+    .required-symbol {
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Student Registration</h1>
+            </div><!-- /.col -->
+            @*<div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Create Task</li>
+                    </ol>
+                </div>*@<!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content bg-gradient-white">
+    <div class="container-fluid">
+
+        <section class="content">
+            @using (Html.BeginForm("StudentRegistration", "diet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <form>
+                    <br />
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label> <span class="required-symbol">*</span>Batch</label>
+                            @Html.DropDownList("batch", ViewBag.BatchYears as SelectList, "Select Batch", new { @class = "form-control", @required = "required" })
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label> <span class="required-symbol">*</span> Registration No.</label>
+                            <input type="text" class="form-control" placeholder="Enter registration no." name="registration_no" required autocomplete="off" readonly value="@Model.registration_no">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label> <span class="required-symbol">*</span> Name</label>
+                            <input type="tel" class="form-control" placeholder="Enter your name" name="name" required autocomplete="off" maxlength="10" value="@Model.name">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Father Name</label>
+                            <input type="text" class="form-control" placeholder="Enter your father name" name="father_name" required autocomplete="off" value="@Model.father_name">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="mobile"><span class="required-symbol">*</span>Mother Name</label>
+                            <input type="tel" class="form-control" placeholder="Enter your mother name" name="mother_name" required autocomplete="off" value="@Model.mother_name">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Mobile No.</label>
+                            <input type="tel" class="form-control numeric-only limit-10-digits" placeholder="Enter mobile no." name="mobile" value="@Model.mobile" required autocomplete="off" maxlength="10" min="10">
+                            <span id="mobile-error-message" style="color: red;"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Gender</label>
+                            <select name="gender" class="form-control" value="@Model.gender" required>
+                                <option disabled selected>Select Gender</option>
+                                <option value="Male" @(Model.gender == "Male" ? "selected" : "")>Male</option>
+                                <option value="Female" @(Model.gender == "Female" ? "selected" : "")>Female</option>
+                                <option value="Others" @(Model.gender == "Others" ? "selected" : "")>Others</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Date of Birth</label>
+                            <input type="date" class="form-control" placeholder="Enter Date of birth" name="dob" required autocomplete="off" value="@Model.dob">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="email"><span class="required-symbol">*</span>Email id</label>
+                            <input type="email" class="form-control" placeholder="example@gmail.com" name="email" required autocomplete="off" value="@Model.email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="Country"><span class="required-symbol">*</span>Country</label>
+                            <select name="country" id="countryDropdown" class="form-control" @(Model.country_id != "" ? "data-select" + Model.country_id + "" : "") required>
+                                <option value="">Select country</option>
+                                @foreach (var item in Model.BindCountry)
+                                {
+                                    if (Model.country_id == item.country_id.ToString())
+                                    {
+                                        <option selected="selected" value="@item.country_id">@item.country_name</option>
+                                    }
+                                    else
+                                    {
+
+                                        <option value="@item.country_id">@item.country_name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>State</label>
+                            <select name="state" id="stateDropdown" class="form-control" required>
+                                <option value="">Select State</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>City</label>
+                            <select name="city" id="cityDropdown" class="form-control" autocomplete="off" required>
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Pin code</label>
+                            <input type="tel" class="form-control numeric-only" placeholder="Enter pin code" name="pin_code" required autocomplete="off" value="@Model.pin_code">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="address"><span class="required-symbol">*</span>Address</label>
+                            <input type="text" class="form-control" placeholder="Enter address" name="address" required autocomplete="off" value=" @Model.address">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Course</label>
+                            <select name="course" class="form-control" value="@Model.course" required>
+                                <option disabled selected>Select Course</option>
+                                <option value="D.El.Ed" @(Model.course == "D.El.Ed" ? "selected" : "")>D.El.Ed</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Semester</label>
+                            <select name="semester" class="form-control" value="@Model.semester" required>
+                                <option disabled selected>Select Semester</option>
+                                <option value="Semester 1" @(Model.semester == "Semester 1" ? "selected" : "")>Semester 1</option>
+                                <option value="Semester 2" @(Model.semester == "Semester 2" ? "selected" : "")>Semester 2</option>
+                                <option value="Semester 3" @(Model.semester == "Semester 3" ? "selected" : "")>Semester 3</option>
+                                <option value="Semester 4" @(Model.semester == "Semester 4" ? "selected" : "")>Semester 4</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmployeeName"><span class="required-symbol">*</span>Image</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="formFile" name="image_url" accept="image/*" required>
+                                <label class="custom-file-label" for="formFile">Upload Photo</label>
+                                <input type="hidden" name="attachment1" @*value="@Model.attachment1"*@ />
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="form_button_box">
+                        <input type="hidden" name="student_id" id="college_id" value="@Model.student_id" />
+                        @if (Model.student_id != null && Model.student_id != "")
+                        {
+                            <button type="submit" class="btn btn-success">Update</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        }
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                    </div>
+                </form>
+            }
+        </section>
+
+        <!-- Main row -->
+    </div>
+    <!--/. container-fluid -->
+</section>
+
+<script src="~/assets/js/jquery-ui.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to allow only numeric input
+        $(".numeric-only").on("input", function () {
+            this.value = this.value.replace(/[^\d]/g, '');
+        });
+
+        // Function to limit the length to 10 digits and show error message
+        $(".limit-10-digits").on("input", function () {
+            var inputValue = this.value;
+            var errorMessage = $("#mobile-error-message");
+
+            if (inputValue.length > 10) {
+                this.value = inputValue.slice(0, 10);
+                errorMessage.text(""); // Clear the error message
+            } else if (inputValue.length < 10) {
+                // You can customize the error message here
+                errorMessage.text("Mobile number must be 10 digits.");
+            } else {
+                errorMessage.text(""); // Clear the error message
+            }
+        });
+
+        $("form").submit(function (e) {
+            // Trim leading and trailing spaces in all text and textarea input fields
+            $(this).find(":input").each(function () {
+                if ($(this).is("input[type='text']") || $(this).is("textarea")) {
+                    var trimmedValue = $(this).val().trim();
+                    $(this).val(trimmedValue);
+
+                    // Validate against blank spaces using the browser's native checkValidity
+                    if (!this.checkValidity()) {
+                        e.preventDefault(); // Prevent form submission
+                        // Display a custom error message
+                        alert("Input cannot start or end with a space!! Please enter correctly");
+                        return false;
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+@* Dropify *@
+<script>
+    $('.dropify').dropify();
+
+</script>
+
+<script type="text/javascript">
+
+        @if(TempData["Message"] != null) {<text >
+            $(document).ready(function () {
+
+                $(document).ready(function()
+                {
+                    @*var tt = @TempData["para"];*@
+                    var tt = @Html.Raw(Json.Encode(TempData["para"]));
+                    console.log(tt);
+                    if (tt === "true") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Success",
+                            text: "@TempData["Message"]",
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: "@TempData["Message"]",
+                        });
+                    }
+                });
+            }); </text>
+        }
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Handle change event of the country dropdown
+        $('#countryDropdown').change(function () {
+            var selectedCountry = $(this).val();
+
+            // Make an AJAX request to get states based on the selected country
+            $.ajax({
+                url: '/diet/getstates',
+                type: 'POST',
+                data: { country: selectedCountry },
+                success: function (data) {
+                    // Clear existing options
+                    $('#stateDropdown').empty();
+                    $('#cityDropdown').empty(); // Clear city dropdown when country changes
+
+                    // Add new options based on the response
+                    $('#stateDropdown').append($('<option>').text('Select State').attr('value', ''));
+                    $.each(data, function (key, item) {
+                        $('#stateDropdown').append($('<option>').text(item.state_name).attr('value', item.state_id));
+                    });
+
+                    // Trigger change event for state dropdown if a state is preselected
+                    var preselectedState = "@Model.state_id";
+                    if (preselectedState !== "") {
+                        $('#stateDropdown').val(preselectedState).change();
+                    }
+                },
+                error: function () {
+                    console.error('Error fetching states');
+                }
+            });
+        });
+
+        // Handle change event of the state dropdown
+        $('#stateDropdown').change(function () {
+            var selectedState = $(this).val();
+
+            // Make an AJAX request to get cities based on the selected state
+            $.ajax({
+                url: '/diet/getcities',
+                type: 'POST',
+                data: { state: selectedState },
+                success: function (data) {
+                    // Clear existing options
+                    $('#cityDropdown').empty();
+
+                    // Add new options based on the response
+                    $('#cityDropdown').append($('<option>').text('Select City').attr('value', ''));
+                    $.each(data, function (key, item) {
+                        $('#cityDropdown').append($('<option>').text(item.city_name).attr('value', item.city_name));
+                    });
+
+                    // Trigger change event for city dropdown if a city is preselected
+                    var preselectedCity = "@Model.city_name";
+                    if (preselectedCity !== "") {
+                        $('#cityDropdown').val(preselectedCity);
+                    }
+                },
+                error: function () {
+                    console.error('Error fetching cities');
+                }
+            });
+        });
+
+        // Trigger change event for country dropdown if a country is preselected
+        var preselectedCountry = "@Model.country_id";
+        if (preselectedCountry !== "") {
+            $('#countryDropdown').val(preselectedCountry).change();
+        }
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Display the name of the uploaded image file
+        $('#formFile').on('change', function () {
+            var fileInput = this;
+            var fileName = fileInput.value.split('\\').pop();
+
+            // Check if the file type is an image
+            if (isValidImageType(fileInput.files[0].type)) {
+                $('.custom-file-label').html(fileName);
+                $('#uploadedFileName').text('Uploaded Image: ' + fileName);
+            } else {
+                alert('Invalid file type. Please select an image.');
+                // Clear the file input
+                fileInput.value = '';
+                $('.custom-file-label').html('Upload Photo');
+                $('#uploadedFileName').text('');
+            }
+        });
+
+        // Function to check if the file type is an image
+        function isValidImageType(fileType) {
+            return fileType.startsWith('image/');
+        }
+    });
+</script>

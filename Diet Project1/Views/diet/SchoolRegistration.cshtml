@@ -1,0 +1,405 @@
+﻿@model Diet_Project1.Models.school
+
+@{
+    ViewBag.Title = "SchoolRegistration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+
+    .col-md-2 {
+        margin: 15px;
+    }
+
+    .required-symbol {
+        color: red;
+        margin-left: 5px;
+    }
+
+    #formFile {
+        margin: 0px;
+        padding: 0px;
+        border-radius: 5px;
+        font-size: 20px
+    }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">School Registration</h1>
+            </div><!-- /.col -->
+            @*<div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Create Task</li>
+                    </ol>
+                </div>*@<!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content bg-gradient-white">
+    <div class="container-fluid">
+        <section class="content bg-gradient-white">
+            <div class="container-fluid">
+                <section class="content">
+                    @using (Html.BeginForm("UploadExcel", "diet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        if (Model.school_id == 0)
+                        {
+                            <div class="card">
+                                <div class="card-header" style="background: #007bff; color: white">
+                                    <h3 class="card-title">Upload_School_List_Sheet</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool-upload" data-toggle="collapse" href="#uploadCollapse" title="Collapse">
+                                            <i class="fas fa-minus" style="color:white"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body collapse" id="uploadCollapse">
+                                    <div class="form-group col-md-6">
+                                        <div class="custom-file">
+                                            <input type="hidden" name="uploadfile1" />
+                                            <input class="custom-file-input" type="file" id="formFile" name="excelfile" accept=".xls, .xlsx" required>
+                                            <label class="custom-file-label" for="formFile">Upload Excel</label>
+                                        </div>
+                                        <label for="inputDescription">Upload Excel Sheet</label><br />
+                                        @Html.Raw(ViewBag.Error)
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-success btn-md btn-block waves-effect text-center m-b-20">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </section>
+
+                <section class="content">
+                    @using (Html.BeginForm("SchoolRegistration", "diet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <form>
+                            <div class="card">
+                                <div class="card-header" style="background: #007bff; color: white">
+                                    <h3 class="card-title">School Registration</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool-registration" data-toggle="collapse" href="#registrationCollapse" title="Collapse">
+                                            <i class="fas fa-minus" style="color:white"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body collapse" id="registrationCollapse">
+                                    <br />
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label><span class="required-symbol">*</span>School Category</label>
+
+                                            <select name="school_category" class="form-control">
+                                                <option disabled selected>Select Category</option>-->
+                                                <option value="Primary" @(Model.@school_category == "Primary" ? "selected" : "")>Primary</option>
+                                                <option value="Secondary" @(Model.@school_category == "Secondary" ? "selected" : "")>Secondary</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label><span class="required-symbol">*</span>School Name</label>
+                                            <input type="text" class="form-control" placeholder="Enter school name" name="school_name" required autocomplete="off" value="@Model.school_name">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="text"><span class="required-symbol">*</span>School Code</label>
+                                            <input type="text" class="form-control" placeholder="Enter school code." name="school_code" required autocomplete="off" value="@Model.school_code">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="mobile"><span class="required-symbol">*</span>Head Master</label>
+                                            <input type="text" class="form-control" placeholder="Enter head master" name="head_master" required autocomplete="off" value="@Model.head_master">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label><span class="required-symbol">*</span>District</label>
+                                            <select name="district" id="districtDropdown" class="form-control" @(Model.district_name != "" ? "data-select" + Model.district_name + "" : "") autocomplete="off" required>
+                                                <option value="">Select district</option>
+                                                @foreach (var item in Model.BindDistrict)
+                                                {
+                                                    if (string.Equals(Model.district_name, item.district_name.ToString(), StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        <option selected="selected" value="@item.district_name">@item.district_name</option>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <option value="@item.district_name">@item.district_name</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label><span class="required-symbol">*</span>Block</label>
+                                            <select name="block" id="blockDropdown" class="form-control" autocomplete="off">
+                                                <option value="">Select Block</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label><span class="required-symbol">*</span>Address</label>
+                                            <input type="text" class="form-control" placeholder="Enter address" name="address" required autocomplete="off" value="@Model.address">
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label><span class="required-symbol">*</span>Mobile No.</label>
+                                            <input type="tel" class="form-control numeric-only limit-10-digits" placeholder="Enter mobile no." name="mobile" value="@Model.mobile" required autocomplete="off" maxlength="10">
+                                            <span id="mobile-error-message" style="color: red;"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label><span class="required-symbol">*</span>Email id</label>
+                                            <input type="email" class="form-control" placeholder="example@gmail.com" name="email" required autocomplete="off" value="@Model.email">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label><span class="required-symbol">*</span>Internship Capacity</label>
+                                            <input type="text" class="form-control numeric-only" placeholder="0" name="internship_capacity" required autocomplete="off" value="@Model.internship_capacity">
+                                        </div>
+                                    </div>
+
+                                    <div class="form_button_box">
+                                        <input type="hidden" name="school_id" id="school_id" value="@Model.school_id" />
+                                        @if (Model.school_id != 0)
+                                        {
+                                            <button type="submit" class="btn btn-success">Update</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-success">Submit</button>
+                                        }
+                                        <button type="reset" class="btn btn-danger">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    }
+                </section>
+
+                <!-- Main row -->
+            </div>
+
+        </section>
+    </div>
+</section>
+
+
+<script src="~/assets/js/jquery-ui.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to allow only numeric input
+        $(".numeric-only").on("input", function () {
+            this.value = this.value.replace(/[^\d]/g, '');
+        });
+
+        // Function to limit the length to 10 digits and show error message
+        $(".limit-10-digits").on("input", function () {
+            var inputValue = this.value;
+            var errorMessage = $("#mobile-error-message");
+
+            if (inputValue.length > 10) {
+                this.value = inputValue.slice(0, 10);
+                errorMessage.text(""); // Clear the error message
+            } else if (inputValue.length < 10) {
+                // You can customize the error message here
+                errorMessage.text("Mobile number must be 10 digits.");
+            } else {
+                errorMessage.text(""); // Clear the error message
+            }
+        });
+
+        $("form").submit(function (e) {
+            // Trim leading and trailing spaces in all text and textarea input fields
+            $(this).find(":input").each(function () {
+                if ($(this).is("input[type='text']") || $(this).is("textarea")) {
+                    var trimmedValue = $(this).val().trim();
+                    $(this).val(trimmedValue);
+
+                    // Validate against blank spaces using the browser's native checkValidity
+                    if (!this.checkValidity()) {
+                        e.preventDefault(); // Prevent form submission
+                        // Display a custom error message
+                        alert("Input cannot start or end with a space!! Please enter correctly");
+                        return false;
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<script type="text/javascript">
+
+        @if(TempData["Message"] != null) {<text >
+            $(document).ready(function () {
+
+                $(document).ready(function()
+                {
+                    @*var tt = @TempData["para"];*@
+                    var tt = @Html.Raw(Json.Encode(TempData["para"]));
+                    console.log(tt);
+                    if (tt === "true") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Success",
+                            text: "@TempData["Message"]",
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: "@TempData["Message"]",
+                        });
+                    }
+                });
+            }); </text>
+        }
+</script>
+
+<script>
+$(document).ready(function () {
+    // Handle change event of the district dropdown
+    $('#districtDropdown').change(function () {
+        var selectedDistrict = $(this).val();
+
+        // Make an AJAX request to get blocks based on the selected district
+        $.ajax({
+            url: '/diet/getblocks',
+            type: 'POST',
+            data: { district: selectedDistrict },
+            success: function (data) {
+                // Clear existing options
+                $('#blockDropdown').empty();
+
+                // Add new options based on the response
+                $('#blockDropdown').append($('<option>').text('Select Block').attr('value', ''));
+
+                var modelBlockNameLowercase = "@Model.block_name".toLowerCase();
+
+                $.each(data, function (key, item) {
+                    var blockNameLowercase = item.block_name.toLowerCase();
+
+                    var option = $('<option>').text(item.block_name).attr('value', item.block_name);
+
+                    // Check if the current block is the selected block in the model (case-insensitive)
+                    if (blockNameLowercase === modelBlockNameLowercase) {
+                        option.prop('selected', true);
+                    }
+
+                    $('#blockDropdown').append(option);
+                });
+            },
+            error: function () {
+                console.error('Error fetching blocks');
+            }
+        });
+    });
+
+    // Trigger change event for district dropdown if a district is preselected
+    var preselectedDistrict = "@Model.district_name";
+    if (preselectedDistrict !== "") {
+        $('#districtDropdown').val(preselectedDistrict.toUpperCase()).change();
+    }
+});
+</script>
+<!-- ... your other scripts ... -->
+
+<script>
+    $(document).ready(function () {
+        // Initially show the registration section
+        $('#registrationCollapse').show();
+
+        // Initially hide the upload section
+        $('#uploadCollapse').hide();
+
+        // Handle click event on the upload card button
+        $('.btn-tool-upload').click(function () {
+            $('#uploadCollapse').show();
+            $('#registrationCollapse').hide();
+            updateCollapseButtons();
+        });
+
+        // Handle click event on the registration card button
+        $('.btn-tool-registration').click(function () {
+            $('#registrationCollapse').show();
+            $('#uploadCollapse').hide();
+            updateCollapseButtons();
+        });
+
+        // Handle click event on the - button for both sections
+        $('.btn-tool-collapse').click(function () {
+            $('.card-body.collapse').hide(); // Hide both card bodies
+            updateCollapseButtons();
+        });
+
+        // Handle click event on the + button for both sections
+        $('.btn-tool-expand').click(function () {
+            $('.card-body.collapse').show(); // Show both card bodies
+            updateCollapseButtons();
+        });
+
+        // Function to update collapse/expand buttons based on the section visibility
+        function updateCollapseButtons() {
+            if ($('#uploadCollapse').is(':visible') || $('#registrationCollapse').is(':visible')) {
+                $('.btn-tool-collapse').show();
+                $('.btn-tool-expand').hide();
+            } else {
+                $('.btn-tool-collapse').hide();
+                $('.btn-tool-expand').show();
+            }
+        }
+
+        // Initially hide the collapse button and show the expand button
+        $('.btn-tool-collapse').hide();
+        $('.btn-tool-expand').show();
+
+        // Rest of your scripts
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Display the name of the uploaded Excel file
+        $('#formFile').on('change', function () {
+            var fileInput = this;
+            var fileName = fileInput.value.split('\\').pop();
+
+            // Check if the file type is an Excel file
+            if (isValidExcelType(fileInput.files[0].type)) {
+                $('.custom-file-label').html(fileName);
+            } else {
+                alert('Invalid file type. Please select an Excel file.');
+                // Clear the file input
+                fileInput.value = '';
+                $('.custom-file-label').html('Upload Excel');
+            }
+        });
+
+        // Function to check if the file type is an Excel file
+        function isValidExcelType(fileType) {
+            return fileType === 'application/vnd.ms-excel' || fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        }
+    });
+</script>

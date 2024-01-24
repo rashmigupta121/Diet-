@@ -1,0 +1,119 @@
+﻿@model List<Diet_Project1.Models.student>
+
+@{
+    ViewBag.Title = "college-Student-List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Student List</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="filterdiv">
+                            @using (Html.BeginForm("student_pdfdownload", "college", FormMethod.Post))
+                            {
+                                <button id="btnpdf">Pdf</button>
+                            }
+
+                            @using (Html.BeginForm("student_exceldownload", "college", FormMethod.Post))
+                            {
+                                <button id="btnexcel">Excel</button>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Student Name</th>
+                                    <th>User Name</th>
+                                    <th>Semester</th>
+                                    <th>Batch</th>
+                                    <th>Mobile No.</th>
+                                    <th>City</th>
+                                    <th>Image</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int serialNumber = 1; // Initialize the serial number counter
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th>@serialNumber</th>
+                                        <th>@item.name</th>
+                                        <td>@item.user_name</td>
+                                        <td>@item.semester</td>
+                                        <td>@item.batch</td>
+                                        <td>@item.mobile</td>
+                                        <td>@item.city</td>
+                                        <th><img src="@item.student_image" style="height:50px; width:80px;" /></th>
+                                        <td>
+                                            <a href="/college/StudentRegistration?student_id=@(item.student_id)" title="edit"><i class="fas fa-edit" style="color: #28a745"></i></a>
+
+                                            <!-- Add the class "delete-student" and data attribute "data-student-id" to the delete link -->
+                                            <a href="#" class="delete-student" data-student-id="@item.student_id" title="delete"><i class="fas fa-regular fa-trash" style="color:red"></i></a>
+
+                                            <a href="/college/ViewStudentDetails?student_id=@(item.student_id)" title="view"><i class="fas fa-regular fa-eye" style="color:orange"></i></a>
+                                        </td>
+                                    </tr>
+                                    { serialNumber++; }// Increment the serial number after each row
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+
+<script>
+    $(document).ready(function () {
+        // Add a click event handler to the delete button with the class "delete-student"
+        $('.delete-student').click(function (e) {
+            e.preventDefault();
+
+            // Get the student ID from the data attribute
+            var studentId = $(this).data('student-id');
+
+            // Show a confirmation dialog using Swal
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user clicks "Yes," proceed with the deletion
+                    window.location.href = '/college/delete_Student?student_id=' + studentId;
+                }
+            });
+        });
+    });
+</script>

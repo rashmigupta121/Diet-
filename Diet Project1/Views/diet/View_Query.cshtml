@@ -1,0 +1,171 @@
+﻿@model List<Diet_Project1.Models.attendance_class>
+@{
+    ViewBag.Title = "View_Query";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Query List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>School Name</th>
+                                    @*<th>Date</th>*@
+                                    <th>Query</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int serialNumber = 1; // Initialize the serial number counter
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th>@serialNumber</th>
+                                        <th>@item.school_name</th>
+                                        @*<td>@item.query_date</td>*@
+                                        <td>@item.query</td>
+                                        <td>
+                                            @if (!item.status)
+                                            {
+                                                <button class="btn btn-success allow-button" data-query-id="@item.query_id">Allow</button>
+                                            }
+                                            else
+                                            {
+                                                <label style="color: #007bff">Allowed</label>
+                                            }
+                                        </td>
+                                    </tr>
+                                    { serialNumber++; }// Increment the serial number after each row
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<!-- Add the modal HTML structure at the end of your view file -->
+<div class="modal fade" id="allowModal" tabindex="-1" role="dialog" aria-labelledby="allowModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="allowModalLabel">Select Date Range</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="allowForm">
+                    <div class="form-group">
+                        <label for="fromDate">From Date:</label>
+                        <input type="date" class="form-control" id="fromDate" name="fromDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="toDate">To Date:</label>
+                        <input type="date" class="form-control" id="toDate" name="toDate" required>
+                    </div>
+                    <input type="hidden" id="selectedQueryId" name="query_id" />
+                    <button type="submit" class="btn btn-primary">Allow</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to the "Allow" button
+        $('.allow-button').click(function () {
+            // Get the query_id from the data attribute
+            var queryId = $(this).data('query-id');
+
+            // Set the selected query_id to the hidden input in the modal form
+            $('#selectedQueryId').val(queryId);
+
+            // Open the modal
+            $('#allowModal').modal('show');
+        });
+
+        // Submit the form inside the modal
+        $('#allowForm').submit(function (e) {
+            e.preventDefault();
+
+            // Get the form data
+            var formData = $(this).serialize();
+
+            // Get the values of fromDate and toDate separately
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+
+            // Add fromDate and toDate to the formData string
+            formData += '&fromDate=' + fromDate + '&toDate=' + toDate;
+
+            // Send an AJAX request to update the status with date range
+            $.ajax({
+                url: '/diet/UpdateQueryStatus',
+                method: 'POST',
+                data: formData,
+                success: function (data) {
+                    if (data.Success) {
+                        // Display success message using Swal
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.Message,
+                        }).then(function () {
+                            // Redirect to the page after the SweetAlert is closed
+                            window.location.href = '/diet/View_Query'; // Replace '/YourTargetPage' with the actual URL
+                        });
+
+                        // You can add additional logic here if needed
+                    } else {
+                        // Display error message using Swal
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.Message,
+                        });
+                    }
+
+                    // Close the modal after handling the response
+                    $('#allowModal').modal('hide');
+                },
+                error: function (error) {
+                    // Handle error if needed
+                    console.error('Error updating status', error);
+                }
+            });
+        });
+    });
+</script>

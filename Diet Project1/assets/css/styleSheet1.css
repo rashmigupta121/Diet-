@@ -1,0 +1,126 @@
+﻿thead {
+    background-color: #3498db; /* Blue */
+    font-weight: bold;
+}
+
+thead th {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #2980b9; /* Darker Blue */
+    color: #ecf0f1; /* Light Gray */
+}
+
+    thead th:nth-child(odd) {
+        background-color: #2980b9; /* Darker Blue */
+    }
+
+    thead th:nth-child(even) {
+        background-color: #3498db; /* Blue */
+    }
+
+    thead th a {
+        color: #ecf0f1; /* Light Gray */
+        text-decoration: none;
+    }
+
+    thead th:hover {
+        background-color: #1f618d; /* Darker Blue on hover */
+    }
+
+.filterdiv {
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+#btnfilter, #btnexcel, #btncsv {
+    background-color: #28a745; /* Green */
+    padding: 4px 8px;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+    margin: 0px 9px;
+}
+
+#btnclearfilter {
+    background: #e74c3c; /* Red */
+    padding: 8px 26px;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+    margin: 0px 9px;
+}
+
+#btnpdf {
+    background-color: #007bff; /* blue */
+    padding: 4px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+    margin: 0px 9px;
+    color: white;
+}
+
+#dataTables_filter label {
+    margin-right: 30px;
+    color: #000;
+}
+
+#dataTables_length label {
+    margin-left: 15px;
+    color: #000;
+}
+
+.customer-select-box label {
+    color: #000;
+    font-weight: 500;
+}
+
+.dataTables_wrapper {
+    width: 100%;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ui-datepicker-month, .ui-datepicker-year {
+    display: initial;
+}
+
+select {
+    display: inline-block;
+}
+
+.customer-select-box {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px;
+}
+
+.admincontainer form #btnfilter {
+    width: 13%;
+}
+
+.filter_btn {
+    text-align: end;
+}
+
+.inputflex .inputbox {
+    display: flex;
+}
+
+    .inputflex .inputbox select {
+        width: 40%;
+        margin-right: 10px;
+    }
+

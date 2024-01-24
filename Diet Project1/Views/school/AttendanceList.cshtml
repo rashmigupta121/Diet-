@@ -1,0 +1,430 @@
+﻿@{
+    ViewBag.Title = "AttendanceList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function () {
+        $("#tbl1").DataTable();
+    })
+</script>
+
+<style>
+    /* Style for the nav-tabs */
+    .nav-tabs {
+        background-color: #f8f9fa; /* Background color */
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+        .nav-tabs > li {
+            margin-bottom: -1px;
+        }
+
+            .nav-tabs > li > a {
+                color: white; /* Inactive tab text color */
+                background-color: #3d59c7; /* Inactive tab background color */
+                border: 1px solid #d8d8d8; /* Border color */
+                border-radius: 4px 4px 0 0;
+                transition: background-color 0.3s, color 0.3s; /* Add smooth transition for color change */
+                padding: 10px 15px; /* Adjust padding for better appearance */
+                text-decoration: none; /* Remove default underline */
+                display: inline-block; /* Ensure proper inline-block display */
+            }
+
+            .nav-tabs > li.active > a,
+            .nav-tabs > li.active > a:hover,
+            .nav-tabs > li.active > a:focus {
+                color: #007bff; /* Active tab text color */
+                background-color: #ffffff; /* Active tab background color */
+                border: 1px solid #d8d8d8; /* Border color */
+                border-bottom-color: transparent; /* Hide the bottom border */
+                font-weight: bold; /* Bold text for the active tab */
+                text-decoration: underline; /* Underline for the active tab */
+            }
+
+            .nav-tabs > li > a:hover,
+            .nav-tabs > li > a:focus {
+                background-color: #f0f0f0; /* Hover state background color */
+                border-color: #d8d8d8; /* Hover state border color */
+            }
+
+            /* Updated style for the active state of the tab */
+            .nav-tabs > li.active > a {
+                background-color: #ffffff; /* Active tab background color */
+                color: #007bff; /* Active tab text color */
+                border-color: #d8d8d8; /* Border color */
+                border-bottom-color: transparent; /* Hide the bottom border */
+                font-weight: bold; /* Bold text for the active tab */
+                text-decoration: underline; /* Underline for the active tab */
+            }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Attendance List</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="nav-tabs-custom">
+                    <div class="tab-content">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#settingsTab" data-toggle="tab"><b>Date Bases Attendance</b></a></li>
+                            <li><a href="#internshipdetailsTab" data-toggle="tab"><b>Student Bases Attendance</b></a></li>
+                        </ul>
+
+                        <div class="tab-pane active" id="settingsTab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="container-fluid">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <div class="input-group">
+                                                    <div class="dropdown">
+                                                        <label>Select Semester</label>
+                                                        <select name="semesterFrom" class="form-control" required>
+                                                            <option selected>Select Semester</option>
+                                                            <option value="Semester 1">Semester 1</option>
+                                                            <option value="Semester 2">Semester 2</option>
+                                                            <option value="Semester 3">Semester 3</option>
+                                                            <option value="Semester 4">Semester 4</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mx-2"></div> <!-- Add horizontal margin between the dropdown button and the input -->
+                                                    <div class="dropdown">
+                                                        <label for="attendanceDate">Select Date:</label>
+                                                        <input type="date" id="attendanceDate" class="form-control" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <br />
+                                                <input class="btn btn-outline-info bg-info" type="button" onclick="filterByStudentNameAndDate()" value="Submit" />
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <div class="filterdiv mt-2">
+                                                    @using (Html.BeginForm("studentAttendance_exceldownload", "school", FormMethod.Post))
+                                                    {
+                                                        <input type="hidden" id="selectedSemester" name="selectedSemester" required />
+                                                        <input type="hidden" id="selectedDate" name="selectedDate" required />
+
+                                                        <button id="btnexcel" class="btn btn-success btn-sm"> <i class="fa-regular fa-calendar-days"></i> Attendance Report</button>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <table id="tbl" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No.</th>
+                                                <th>Student Name</th>
+                                                <!-- Dynamic column for selected date -->
+                                                <th id="selectedDate1"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="internshipdetailsTab">
+                            <div class="card">
+                                <div class="card-header" id="settings">
+                                    <div class="container-fluid">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <div class="input-group">
+                                                    <div class="dropdown">
+                                                        <label>Select Semester</label>
+                                                        <select name="semester" class="form-control" required>
+                                                            <option selected>Select Semester</option>
+                                                            <option value="Semester 1">Semester 1</option>
+                                                            <option value="Semester 2">Semester 2</option>
+                                                            <option value="Semester 3">Semester 3</option>
+                                                            <option value="Semester 4">Semester 4</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mx-2"></div> <!-- Add horizontal margin between the dropdown button and the input -->
+                                                    <div class="dropdown">
+                                                        <label>Select Student Name</label>
+                                                        <select name="student_name" class="form-control" required>
+                                                            <option selected>Select Student</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <br />
+                                                <input class="btn btn-outline-info bg-info" type="button" onclick=" filterBySemesterAndStudent()" value="Submit" />
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <div class="filterdiv mt-2">
+                                                    @using (Html.BeginForm("studentAttendancebyName_exceldownload", "school", FormMethod.Post, new { id = "attendanceForm" }))
+                                                    {
+                                                        <input type="hidden" id="selectedSemester1" name="selectedSemester1" required />
+                                                        <input type="hidden" id="selectedStudent1" name="selectedStudent1" required />
+
+                                                        <button id="btnexcel" class="btn btn-success btn-sm"><i class="fa-regular fa-calendar-days"></i> Attendance Report</button>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <table id="tbl1" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No.</th>
+                                                <th>Date</th>
+                                                <!-- Dynamic column for selected date -->
+                                                <th id="selectedStudent"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+
+                        </div>
+                    </div>   <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<script>
+
+    $(document).ready(function () {
+        // Initialize the tab plugin
+        $('.nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+            // Remove active class from all tabs
+            $('.nav-tabs li').removeClass('active');
+            // Add active class to the clicked tab
+            $(this).parent('li').addClass('active');
+        });
+
+        // Event handler for semester dropdown change in the internshipdetailsTab
+        $('select[name="semester"]').change(function () {
+            // Call a function to populate the student dropdown based on the selected semester
+            populateStudentDropdown();
+        });
+
+        $('#attendanceForm').submit(function () {
+            var selectedSemester = $('#selectedSemester1').val();
+            var selectedStudent = $('#selectedStudent1').val();
+
+            // Check if both hidden input fields are not blank
+            if (selectedSemester === '' || selectedStudent === '') {
+                alert('Please select semester and student before generating the attendance report.');
+                return false; // Prevent the form submission
+            }
+        });
+    });
+
+    function filterByStudentNameAndDate() {
+        var selectedSemester = $('select[name="semesterFrom"]').val();
+        var selectedDate = $('#attendanceDate').val();
+
+        // Validate that both semester and date are selected
+        if (selectedSemester === 'Select Semester' || selectedDate === '') {
+            alert('Please select both semester and date before filtering.');
+            return;
+        }
+
+        console.log('Selected Semester:', selectedSemester);
+        console.log('Selected Date:', selectedDate);
+
+        // Update hidden input fields
+        $('#selectedSemester').val(selectedSemester);
+        $('#selectedDate').val(selectedDate);
+
+        // Make an Ajax request to get filtered data
+        $.ajax({
+            url: '/school/FilterAttendanceList',
+            type: 'GET',
+            dataType: 'json',
+            data: { semester: selectedSemester, date: selectedDate },
+            success: function (data) {
+                console.log('Data received:', data);
+
+                // Update the table body with the fetched data
+                var tbody = $('#tbl tbody');
+                tbody.empty(); // Clear existing rows
+
+                // Add header for the selected date
+                $('#selectedDate1').text(selectedDate);
+
+                // Check if the data is an array and has elements
+                if (Array.isArray(data) && data.length > 0) {
+                    $.each(data, function (index, item) {
+                        console.log('Processing item:', item);
+                        var row = '<tr>' +
+                            '<td>' + (index + 1) + '</td>' +
+                            '<td>' + item.student_name + '</td>' +
+                            '<td>' + item.attendance + '</td>' +
+                            '</tr>';
+                        tbody.append(row);
+                    });
+                } else {
+                    // Display a message when there is no data
+                    tbody.html('<tr><td colspan="3" class="text-center">No data available</td></tr>');
+                }
+            },
+            error: function () {
+                alert('Error fetching data.');
+            }
+        });
+    }
+
+    function populateStudentDropdown() {
+        var selectedSemester = $('select[name="semester"]').val();
+        console.log('Selected Semester (for Student Dropdown):', selectedSemester);
+
+        // Make an Ajax request to get the student list based on the selected semester
+        $.ajax({
+            url: '/school/GetStudentList',
+            type: 'GET',
+            dataType: 'json',
+            data: { semester: selectedSemester },
+            success: function (data) {
+                console.log('Student List Data received:', data);
+
+                // Update the student dropdown with the fetched data
+                var studentDropdown = $('select[name="student_name"]');
+                studentDropdown.empty(); // Clear existing options
+
+                // Add default option
+                studentDropdown.append($('<option>', {
+                    value: '',
+                    text: 'Select Student'
+                }));
+
+                // Check if the data is an array and has elements
+                if (Array.isArray(data) && data.length > 0) {
+                    $.each(data, function (index, item) {
+                        console.log('Processing student item:', item);
+                        // Add each student as an option to the dropdown
+                        studentDropdown.append($('<option>', {
+                            value: item.student_id,
+                            text: item.student_name
+                        }));
+                    });
+                } else {
+                    // Display a message when there is no student data
+                    // You can modify this message based on your requirements
+                    studentDropdown.append($('<option>', {
+                        value: '',
+                        text: 'No students available'
+                    }));
+                }
+            },
+            error: function () {
+                alert('Error fetching student data.');
+            }
+        });
+    }
+
+    function filterBySemesterAndStudent() {
+        var selectedSemester = $('select[name="semester"]').val();
+        var selectedStudentId = $('select[name="student_name"]').val();
+        var selectedStudentName = $('select[name="student_name"] option:selected').text(); // Get selected student name from the dropdown
+
+        // Validate that both semester and student are selected
+        if (selectedSemester === 'Select Semester' || selectedStudentId === null) {
+            alert('Please select both semester and student before filtering.');
+            return;
+        }
+
+        console.log('Selected Semester (for Attendance):', selectedSemester);
+        console.log('Selected Student ID (for Attendance):', selectedStudentId);
+        console.log('Selected Student Name (for Attendance):', selectedStudentName);
+
+        // Update hidden input fields
+        $('#selectedSemester1').val(selectedSemester);
+        $('#selectedStudent1').val(selectedStudentId);
+
+        // Update the table body with the fetched data
+        var tbody = $('#tbl1 tbody');
+        tbody.empty(); // Clear existing rows
+
+        // Add header for the selected semester and student
+        $('#selectedStudent').text(selectedSemester + ' - ' + selectedStudentName);
+
+        // Now you can make an Ajax request to get attendance data based on selected semester and student
+        $.ajax({
+            url: '/school/FilterAttendanceBySemesterAndStudent',
+            type: 'GET',
+            dataType: 'json',
+            data: { semester: selectedSemester, student: selectedStudentId },
+            success: function (attendanceData) {
+                console.log('Attendance Data received:', attendanceData);
+
+                // Check if the data is an array and has elements
+                if (Array.isArray(attendanceData) && attendanceData.length > 0) {
+                    $.each(attendanceData, function (index, item) {
+                        console.log('Processing attendance item:', item);
+
+                        var dateMilliseconds = parseInt(item.date.replace("/Date(", "").replace(")/", ""));
+                        var formattedDate = new Date(dateMilliseconds).toLocaleDateString();
+
+                        var row = '<tr>' +
+                            '<td>' + (index + 1) + '</td>' +
+                            '<td>' + formattedDate + '</td>' +
+                            '<td>' + item.attendance + '</td>' +
+                            '</tr>';
+                        tbody.append(row);
+                    });
+                } else {
+                    // Display a message when there is no attendance data
+                    tbody.html('<tr><td colspan="3" class="text-center">No data available</td></tr>');
+                }
+            },
+            error: function () {
+                alert('Error fetching attendance data.');
+            }
+        });
+    }
+
+    $('#btnexcel').click(function () {
+        var selectedSemester = $('#selectedSemester').val();
+        var selectedDate = $('#selectedDate').val();
+
+        // Check if both hidden input fields are not blank
+        if (selectedSemester === '' || selectedDate === '') {
+            alert('Please select semester and date before generating the attendance report.');
+            return false; // Prevent the button click action
+        }
+
+        // Proceed with the button click action
+        // Add your code to generate the attendance report or perform other actions
+    });
+</script>

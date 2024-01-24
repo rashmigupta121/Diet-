@@ -1,0 +1,142 @@
+﻿@model Diet_Project1.Models.internship
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diet </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon icon -->
+    <link rel="icon" href="~/assets/img/Uttar-Pradesh-govt.jpg" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style>
+        .row1 {
+            margin-left: 25%;
+            margin-top: 3%;
+            margin-right: 25%;
+        }
+
+
+        .student {
+            margin-left: 5%;
+        }
+
+
+        .subject p {
+            line-height: 15px;
+        }
+
+
+        .vijay {
+            margin-left: 43%;
+        }
+
+        .rajmalae {
+            margin-left: 43%;
+        }
+
+
+
+
+        .header {
+            margin-left: 4.5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row row1">
+
+            <h4 class="header"><b><u>कार्यालय जिला शिक्षा एवं प्रशिक्षण संस्थान रजलामई गौतम बुद्ध नगर</u><br><br><span style="margin-left:24%"><u>आदेश</u></span> </b></h4>
+            <section class="student">
+                <p>Student Name : @Model.student_name</p>
+                <p>College Name : @Model.diet_name@Model.college_name</p>
+            </section>
+            <br>
+            <section class="subject">
+                <p>विषय - डीoएलoएडo प्रशिक्षण @Model.batch में प्रशिक्षणरत प्रशिक्षणार्थियों का प्रथम @Model.semester सेमेस्टर् इन्टर्न्शिप कार्यक्रम </p><p>हेतु प्राथमिक विद्यालयों में प्रेषण के सम्बन्ध में I</p>
+            </section>
+            <h5>महोदया,</h5>
+            <h5>उपर्युक्त विषयक आपको अवगत कराना  है की डीoएलoएडo प्रशिक्षण @Model.batch में चयनित प्रशिक्षुओ<br><br>का @Model.semester सेमेस्टर् इन्टर्न्शिप कार्यक्रम दिनांक - @Model.start_date से दिनांक - @Model.end_date तक निर्धारित किया गया<br><br> है I</h5>
+            <br>
+            <h5>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;इस कार्यक्रम के अंतर्गत आपको उच्च प्राथमिक विद्यालय <b>@Model.address</b> विकास क्षेत्र <b>@Model.block</b><br><br> जनपद - <b>@Model.district_name</b> आवंटित
+                किया जाता है I
+            </h5>
+
+            <h5>
+                अतः आप अपने आवंटित विद्यालय में निर्धारित तिथि से इन्टर्न्शिप कार्यक्रम करना
+                सुनिश्चित करें I
+            </h5><br> <section class="vijay">
+                <h5 style="margin-left:7%">
+                    भवदीय,<br><br><img src="~/assets/img/PrincipalSign.jpg" style="margin-left:-12%; margin-bottom: -9%;  height: 30px; width:160px">
+                </h5><br> <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(विजय पाल सिंह)</h5> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;प्राचार्य,
+                    <h5>जिला शिक्षा एवं प्रशिक्षण संस्थान,</h5> <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;रजलामई गौतम बुद्ध नगर I</h5><br>
+            </section> <h5>
+                प्रतिलिपि निम्नांकित को सूचनार्थ एवं आवश्यक कार्यवाही हेतु
+                प्रेषित I
+            </h5>
+
+            <ol start="1">
+                <li><h5>निदेशक, राज्य शैक्षिक अनुसंधान और प्रशिक्षण परिषद ऊOप्रO लखनऊ I</h5></li>
+                <li><h5>सचिव परीक्षा नियामक प्राधिकारी ऊOप्रO प्रयागराज I</h5></li>
+                <li><h5>जिला बेसिक शिक्षा अधिकारी जनपद - गौतम बुद्ध नगर I</h5></li>
+                <li>Principle College Name  :@Model.college_name@Model.diet_name</li>
+                <li><h5>संबंधित विद्यालय के प्रधानाध्यापक को इस आशय से कि आपके विद्यालय में प्रथम @Model.semester सेमेस्टर्</h5><h5> इन्टर्न्शिप हेतु प्रशिक्षु की उक्त तिथि की उपस्थित एवं इन्टर्न्शिप प्रोफार्मा पर अंक प्रदर्शित</h5> <h5>कर संस्थान प्रेषित करे I</h5></li>
+            </ol><br>
+            <section class="rajmalae">
+                <img src="~/assets/img/PrincipalSign.jpg" style="margin-left:-1%; height: 30px; width:160px">
+                <h5 style="margin-left:12%">प्राचार्य,</h5>
+                <h5>जिला शिक्षा एवं प्रशिक्षण संस्थान</h5>
+                <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;रजलामई गौतम बुद्ध नगर I</h5>
+            </section>
+            <br><br><br>
+        </div>
+    </div>
+</body>
+</html>
+
+
+@*<div id="content">
+        <h3>Hello, this is a H3 tag</h3>
+
+        <p>A paragraph</p>
+    </div>
+    <div id="editor"></div>
+    <button id="cmd">generate PDF</button>
+
+    <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/assets/css/tableexport/jspdf/jspdf.js"></script>
+    <script src="~/assets/css/tableexport/jspdf/libs/base64.js"></script>
+    <script src="~/assets/css/tableexport/jspdf/libs/sprintf.js"></script>
+    <script src="~/assets/css/tableexport/html2canvas.js"></script>
+    <script src="~/assets/css/tableexport/jquery.base64.js"></script>
+    <script src="~/assets/css/tableexport/tableExport.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script>
+        var doc = new jsPDF();
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
+
+        $('#cmd').click(function () {
+            doc.fromHTML($('#content').html(), 15, 15, {
+                'width': 170,
+                'elementHandlers': specialElementHandlers
+            });
+            doc.save('sample-file.pdf');
+        });
+    </script>*@
+
+

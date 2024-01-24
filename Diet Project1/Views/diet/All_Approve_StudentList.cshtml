@@ -1,0 +1,97 @@
+﻿@model List<Diet_Project1.Models.internship>
+
+@{
+    ViewBag.Title = "Diet-All_Approve_StudentList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Approved Student List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Applied Date</th>
+                                    <th>Student Name</th>
+                                    <th>Semester</th>
+                                    <th>School Name</th>
+                                    <th>School Code</th>
+                                    <th>School Catagory</th>
+                                    <th>Block</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Status</th>
+                                    <th>Generate Letter</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int serialNumber = 1; // Initialize the serial number counter
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th>@serialNumber</th>
+                                        <th>@item.last_update</th>
+                                        <th>@item.student_name</th>
+                                        <td>@item.semester</td>
+                                        <td>@item.school_name</td>
+                                        <td>@item.school_code</td>
+                                        <td>@item.school_category</td>
+                                        <td>@item.block</td>
+                                        <td>@item.start_date</td>
+                                        <td>@item.end_date</td>
+                                        <td>@item.status</td>
+                                        <td style="text-align:center">
+                                            @if (item.generate_letter == 0)
+                                            {
+                                                <a href="/diet/LetterGenerate?user_name=@(item.user_name)&start_date=@(item.start_date)" title="Generate Letter" onclick="refreshPage()"><i class="fa-solid fa-book"></i></a>
+
+                                            }
+                                            else if (item.generate_letter == 1)
+                                            {
+                                                <span class="label label-success" style="color:dodgerblue;font-weight:bolder">Letter Generated</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    { serialNumber++; }// Increment the serial number after each row
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<script>
+    function refreshPage() {
+        // Reload the current page after generating the letter
+        location.reload();
+    }
+</script>

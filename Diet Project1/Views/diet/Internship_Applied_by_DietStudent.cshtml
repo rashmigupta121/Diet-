@@ -1,0 +1,223 @@
+﻿@model List<Diet_Project1.Models.internship>
+
+@{
+    ViewBag.Title = "Diet-AppliedDietStudentList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Applied by Diet Student List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="mb-2">
+                            <button class="btn btn-success btn-sm" style="padding:4px 10px 4px 10px; color:white" id="btnApprove" title="Approved"><i class="fa-solid fa-square-check"></i></button>
+                            <label>Approved</label>
+                            <button class="btn btn-danger btn-sm" style="padding:4px 10px 4px 10px " id="btnReject" title="Reject"><i class="fa-solid fa-square-xmark"></i></button>
+                            <label>Reject</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll" /></th>
+                                    <th>S.No.</th>
+                                    <th hidden>User Name</th>
+                                    <th>Applied Date</th>
+                                    <th>Student Name</th>
+                                    <th>Semester</th>
+                                    <th>School Name</th>
+                                    <th>School Code</th>
+                                    <th>School Catagory</th>
+                                    <th>Block</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                   
+                                    @*<th>Status By College</th>*@
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int serialNumber = 1; // Initialize the serial number counter
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td><input type="checkbox" class="rowCheckbox" /></td>
+                                        <th>@serialNumber</th>
+                                        <th class="username" hidden>@item.user_name</th>
+                                        <th>@item.last_update</th>
+                                        <th>@item.student_name</th>
+                                        <td class="semester">@item.semester</td>
+                                        <td>@item.school_name</td>
+                                        <td>@item.school_code</td>
+                                        <td>@item.school_category</td>
+                                        <td>@item.block</td>
+                                        <td class="startDate">@item.start_date</td>
+                                        <td>@item.end_date</td>
+                                        @*<td>@item.status_by_college</td>*@
+                                        <td>@item.status</td>
+                                    </tr>
+                                    { serialNumber++; }// Increment the serial number after each row
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmationMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmActionBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Check/uncheck all checkboxes when the master checkbox is clicked
+        $("#selectAll").change(function () {
+            $(".rowCheckbox").prop("checked", $(this).prop("checked"));
+        });
+
+        // Check/uncheck the master checkbox based on the state of individual checkboxes
+        $(".rowCheckbox").change(function () {
+            if ($(".rowCheckbox:checked").length == $(".rowCheckbox").length) {
+                $("#selectAll").prop("checked", true);
+            } else {
+                $("#selectAll").prop("checked", false);
+            }
+        });
+
+        // Handle click on the "Approve Selected" button
+        $("#btnApprove").click(function () {
+            showConfirmationModal("Approve", "Are you sure you want to approve the selected rows?");
+        });
+
+        // Handle click on the "Reject Selected" button
+        $("#btnReject").click(function () {
+            showConfirmationModal("Reject", "Are you sure you want to reject the selected rows?");
+        });
+
+        // Handle click on individual checkboxes
+        $(".rowCheckbox").click(function () {
+            if (!$(this).prop("checked")) {
+                // If any checkbox is deselected, uncheck the "Select All" checkbox
+                $("#selectAll").prop("checked", false);
+            }
+        });
+
+        // Handle click on the modal confirm button
+        $("#confirmActionBtn").click(function () {
+            var action = $("#confirmationModal").data("action");
+            var selectedRows = getSelectedRows();
+
+            if (selectedRows.length === 0) {
+                // No rows selected, show a warning message
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please select at least one row before confirming.',
+                }).then(function () {
+                    // Redirect to the page after the SweetAlert is closed
+                    window.location.href = '/diet/Internship_Applied_by_DietStudent'; // Replace '/YourTargetPage' with the actual URL
+                });
+                return;
+            }
+
+            // Extract data from selected rows
+            var dataToSend = [];
+            $.each(selectedRows, function (index, row) {
+                var username = $("#tbl tbody tr").eq(row).find(".username").text();
+                var semester = $("#tbl tbody tr").eq(row).find(".semester").html(); // Use .html() instead of .text()
+                var startDate = $("#tbl tbody tr").eq(row).find(".startDate").html(); // Use .html() instead of .text()
+                dataToSend.push({ user_name: username, semester: semester, start_date: startDate });
+            });
+            console.log("Data to Send:", dataToSend);
+
+            // Send usernames to the backend for approval/rejection
+            $.ajax({
+                url: '/diet/UpdateStatus',
+                type: 'POST',
+                data: { dataToSend: dataToSend, action: action },
+                success: function (result) {
+                    // Handle success (if needed)
+                    console.log(result);
+
+                    // Show SweetAlert notification
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'successfully Done',
+                        //showConfirmButton: false,
+                        //timer: 1500
+                    }).then((result) => {
+                        // Reload the page after updating status
+                        location.reload();
+                    });
+                },
+                error: function (error) {
+                    // Handle error (if needed)
+                    console.error(error);
+                }
+            });
+
+            // Close the modal
+            $("#confirmationModal").modal('hide');
+        });
+
+        // Function to show the confirmation modal
+        function showConfirmationModal(action, message) {
+            $("#confirmationMessage").text(message);
+            $("#confirmationModal").data("action", action).modal('show');
+        }
+
+        // Function to get an array of selected row indexes
+        function getSelectedRows() {
+            var selectedRows = [];
+            $(".rowCheckbox:checked").each(function () {
+                selectedRows.push($(this).closest('tr').index());
+            });
+            return selectedRows;
+        }
+    });
+</script>

@@ -1,0 +1,283 @@
+﻿@model List<Diet_Project1.Models.student>
+
+@{
+    ViewBag.Title = "College-RenewalStudents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Student List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <div class="dropdown">
+                                            <label>From</label>
+                                            <select name="semesterFrom" class="form-control" onchange="filterStudentsBySemester(this.value)">
+                                                <option selected>Select Semester</option>
+                                                <option value="Semester 1">Semester 1</option>
+                                                <option value="Semester 2">Semester 2</option>
+                                                <option value="Semester 3">Semester 3</option>
+                                                <option value="Semester 4">Semester 4</option>
+                                            </select>
+                                        </div>
+                                        <div class="mx-2"></div> <!-- Add horizontal margin between the dropdown button and the input -->
+                                        <div class="dropdown">
+                                            <label>To</label>
+                                            <select name="semesterTo" class="form-control">
+                                                <option selected>Select Semester</option>
+                                                <option value="Semester 1">Semester 1</option>
+                                                <option value="Semester 2">Semester 2</option>
+                                                <option value="Semester 3">Semester 3</option>
+                                                <option value="Semester 4">Semester 4</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <br />
+                                    <button class="btn btn-outline-info bg-info" type="button" id="promot" onclick="promoteStudents()">Promote</button>
+                                </div>
+                                <div class="col-md-4">
+                                    <!--<div class="filterdiv mt-2">-->
+                                    <!-- Use mt-2 for top margin on smaller screens -->
+                                    <!--@using (Html.BeginForm("student_pdfdownload", "diet", FormMethod.Post))
+                                        {
+                                            <button id="btnpdf" class="btn btn-primary btn-sm">Pdf</button>
+                                        }
+
+                                        @using (Html.BeginForm("student_exceldownload", "diet", FormMethod.Post))
+                                        {
+                                            <button id="btnexcel" class="btn btn-success btn-sm">Excel</button>
+                                        }
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="filterdiv mt-2">
+                            <!-- ... Other buttons ... -->
+
+
+                        </div>
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-check">
+                                            <input class="form-check-input" id="btnCheck" type="checkbox">
+                                            <label class="form-check-label" for="selectAll">
+                                                Select All
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th>Registration No.</th>
+                                    <th>Student Name</th>
+                                    <th>User Name</th>
+                                    <th>Password</th>
+                                    <td>Batch</td>
+                                    <th>Semester</th>
+                                    <th>Mobile No.</th>
+                                    <td>City</td>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input student-checkbox" type="checkbox" id="studentCheckbox@(item.student_id)" data-student-id="@item.student_id">
+                                            </div>
+                                        </td>
+                                        <th>@item.registration_no</th>
+                                        <th>@item.name</th>
+                                        <td>@item.user_name</td>
+                                        <td>@item.password</td>
+                                        <td>@item.batch</td>
+                                        <td>@item.semester</td>
+                                        <td>@item.mobile</td>
+                                        <td>@item.city</td>
+                                        <td>
+                                            @*<a href="/diet/StudentRegistration?student_id=@(item.student_id)"><i class="fas fa-edit"></i></a>
+                                                <a href="/diet/delete_Student?student_id=@(item.student_id)"><i class="fas fa-regular fa-trash"></i></a>
+                                                <a href="/diet/ViewStudentDetails?student_id=@(item.student_id)"><i class="fas fa-regular fa-eye"></i></a>*@
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<script>
+    // Event delegation for the checkbox click
+    // Toggle all checkboxes
+    $('#tbl').on('click', '#btnCheck', function () {
+        var isSelectAllChecked = $(this).prop('checked');
+        $('.student-checkbox').prop('checked', isSelectAllChecked);
+    });
+
+    var selectedSemesterFilter; // Change the variable name to avoid conflict
+
+    function filterStudentsBySemester(selectedSemester) {
+        $.ajax({
+            url: '/college/FilterStudentsBySemester',
+            type: 'POST',
+            data: { semester: selectedSemester },
+            dataType: 'json', // Expect JSON response
+            success: function (data) {
+                // Save the selected semester
+                selectedSemesterFilter = selectedSemester;
+
+                // Clear the current thead and tbody content
+                $('#tbl thead, #tbl tbody').empty();
+
+                // Populate the table header with the received data
+                var tableHeader = '<thead>' +
+                    '<tr>' +
+                    '<th>' +
+                    '<div class="form-check">' +
+                    '<input class="form-check-input" id="btnCheck" type="checkbox">' +
+                    '<label class="form-check-label" for="selectAll">Select All</label>' +
+                    '</div>' +
+                    '</th>' +
+                    '<th>Registration No.</th>' +
+                    '<th>Student Name</th>' +
+                    '<th>User Name</th>' +
+                    '<th>Password</th>' +
+                    '<td>Batch</td>' +
+                    '<th>Semester</th>' +
+                    '<th>Mobile No.</th>' +
+                    '<td>City</td>' +
+                    '<th></th>' +
+                    '</tr>' +
+                    '</thead>';
+
+                $('#tbl').append(tableHeader);
+
+                // Populate the table body with the received data
+                var tableBody = '<tbody>';
+                $.each(data, function (index, item) {
+                    var checkboxId = 'studentCheckbox' + item.student_id; // Unique ID for each checkbox
+                    var newRow = '<tr>' +
+                        '<td><div class="form-check"><input class="form-check-input student-checkbox" type="checkbox" id="' + checkboxId + '" data-student-id="' + item.student_id + '" data-semester="' + item.semester + '"></div></td>' +
+                        '<th>' + item.registration_no + '</th>' +
+                        '<th>' + item.name + '</th>' +
+                        '<td>' + item.user_name + '</td>' +
+                        '<td>' + item.password + '</td>' +
+                        '<td>' + item.batch + '</td>' +
+                        '<td>' + item.semester + '</td>' +
+                        '<td>' + item.mobile + '</td>' +
+                        '<td>' + item.city + '</td>' +
+                        '<td></td>' +
+                        '</tr>';
+
+                    tableBody += newRow;
+                });
+
+                tableBody += '</tbody>';
+                $('#tbl').append(tableBody);
+            },
+            error: function () {
+                alert('Error fetching data.');
+            }
+        });
+    }
+</script>
+
+<script>
+    // Function to enable/disable the "Promote" button based on the selected semester
+    function togglePromoteButton() {
+        var selectedSemester = $('select[name="semesterTo"]').val();
+        $('#promot').prop('disabled', selectedSemester === "Select Semester");
+    }
+
+    // Event listener for the 'To' dropdown change
+    $('select[name="semesterTo"]').on('change', togglePromoteButton);
+
+    // Initial state: Disable the "Promote" button
+    $(document).ready(function () {
+        togglePromoteButton();
+    });
+
+    function promoteStudents() {
+        // Get the target semester from the 'semesterTo' dropdown
+        var targetSemester = $('select[name="semesterTo"]').val();
+
+        // Check if a semester is selected
+        if (targetSemester === "Select Semester") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please select a target semester.',
+            });
+            return; // Don't proceed further if no semester is selected
+        }
+
+        // Get an array of selected student IDs
+        var selectedStudentIds = $('.student-checkbox:checked').map(function () {
+            return $(this).data('student-id');
+        }).get();
+
+        // Send data to the server
+        $.ajax({
+            url: '/college/PromoteStudents', // Update the URL with your actual controller action
+            type: 'POST',
+            data: {
+                targetSemester: targetSemester,
+                studentIds: selectedStudentIds
+            },
+            success: function (data) {
+                // Handle success response
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Students promoted successfully.',
+                }).then(function () {
+                    // Redirect to the page after the SweetAlert is closed
+                    window.location.href = '/college/RenewalStudents'; // Replace '/YourTargetPage' with the actual URL
+                });
+            },
+            error: function () {
+                // Display error message using SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error promoting students.',
+                });
+            }
+        });
+    }
+</script>

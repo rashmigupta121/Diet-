@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "diet-ViewStudentDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/ViewDetails.css" rel="stylesheet" />
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0"></h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+
+<div style="display:flex">
+    @*<div id="wrapper">*@
+    <div id="left">
+        <div style="margin-left:100px">
+        </div>
+        <div id="left_content" align="center">
+            <img src="@Model.student_image" @*style="border-radius: 100px;"*@>
+            <br />
+            <h3 align="center" style="color:black; font-weight:bolder">@Model.name</h3>
+            <hr />
+            <h4 align="center">Contact Information</h4>
+            @*@{ var isactive = @Html.Raw(Model.isactive).ToString(); }
+
+                @if (isactive == "1")
+                {
+                    <span class="badge badge-success" style="margin: 5px;">Active</span>
+                }
+                else if (isactive == "0")
+                {
+                    <span class="badge badge-danger" style="margin: 5px;">Deactive</span>
+                }*@
+            <div align="left">
+                <label><i class="fas fa-user bg-green yash"></i>@Model.name</label>
+                <br />
+                <label><i class="fas fa-envelope bg-black yash"></i>@Model.email</label><br />
+                <label><i class="fa fa-phone bg-blue FontBig yash" title="Mobile No" aria-hidden="true"></i>@Model.mobile</label><br />
+                @*<label><i class="fas fa-book"></i>@Model.qualification</label><br />*@
+                <label><i class="fas fa-address-card bg-yellow yash"></i>@Model.address</label><br />
+                <label style="margin-left:40px;">@Model.country, @Model.state, @Model.city</label><br />
+            </div>
+        </div>
+    </div>
+
+
+    <div id="right">
+        <h3 align="center">Student Details</h3>
+        <hr />
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Student Name:-</label>
+                    <input type="text" value="@Model.name" readonly>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Batch:-</label>
+                    <input type="text" value="@Model.batch" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Registration No:-</label>
+                    <input type="text" value="@Model.registration_no" readonly>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="inputEmployeeName">Gender:-</label>
+                    <input type="text" value="@Model.gender" readonly>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">User Name:-</label>
+                    <input type="text" value="@Model.user_name" readonly>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="inputEmployeeName">Password:-</label>
+                    <input type="text" value="@Model.password" readonly>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Father Name:-</label>
+                    <input type="text" value="@Model.father_name" readonly>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="inputEmployeeName">Mother Name:-</label>
+                    <input type="text" value="@Model.mother_name" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Date of bitrh:-</label>
+                    <input type="text" value="@Model.dob" readonly>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="inputEmployeeName">Country:-</label>
+                    <input type="text" value="@Model.country" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">State:-</label>
+                    <input type="text" value="@Model.state" readonly>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">City:-</label>
+                    <input type="text" value="@Model.city" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Address:-</label>
+                    <input type="text" value="@Model.address" readonly>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Pin Code:-</label>
+                    <input type="text" value="@Model.pin_code" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Mobile:-</label>
+                    <input type="text" value="@Model.mobile" readonly>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Email:-</label>
+                    <input type="text" value="@Model.email" readonly>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="form-group col-sm-6">
+                <label for="">Course:-</label>
+                <input type="text" value="@Model.course" readonly>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="">Semester:-</label>
+                <input type="text" value="@Model.semester" readonly>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="form-row">
+
+        </div>
+    </div>
+
+</div>
+

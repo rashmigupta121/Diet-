@@ -1,0 +1,117 @@
+﻿@model List<Diet_Project1.Models.diet>
+
+@{
+    ViewBag.Title = "View_Diet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Diet List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="filterdiv">
+                            @using (Html.BeginForm("diet_pdfdownload", "admin", FormMethod.Post))
+                            {
+                                @*<input type="hidden" id="BookCtg_Name" name="BookCtg_Name" value='@TempData["BookCtg_Name"]' />*@
+
+                                <button id="btnpdf">Pdf</button>
+                            }
+
+                            @using (Html.BeginForm("diet_exceldownload", "admin", FormMethod.Post))
+                            {
+                                @*<input type="hidden" id="BookCtg_Name" name="BookCtg_Name" value='@TempData["BookCtg_Name"]' />*@
+
+                                <button id="btnexcel">Excel</button>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Diet Name</th>
+                                    <th>User Name</th>
+                                    <th>Director Name</th>
+                                    <th>Mobile No.</th>
+                                    <th>Email</th>
+                                    <th>Block</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <th>@item.diet_name</th>
+                                        <td>@item.user_name</td>
+                                        <td>@item.director_name</td>
+                                        <td>@item.mobile</td>
+                                        <td>@item.email</td>
+                                        <td>@item.block</td>
+                                        <td>
+
+                                            <a href="/admin/DietRegistration?diet_id=@(item.diet_id)" title="edit"><i class="fas fa-edit" style="color: #28a745"></i></a>
+                                            <a href="#" class="delete-diet" data-diet-id="@item.diet_id" title="delete"><i class="fas fa-regular fa-trash" style="color:red"></i></a>
+                                            <a href="/admin/ViewDietDetails?diet_id=@(item.diet_id)" title="view"><i class="fas fa-regular fa-eye" style="color:orange"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+    $(document).ready(function () {
+        // Add a click event handler to the delete button with the class "delete-diet"
+        $('.delete-diet').click(function (e) {
+            e.preventDefault();
+
+            // Get the diet ID from the data attribute
+            var dietId = $(this).data('diet-id');
+
+            // Show a confirmation dialog using Swal
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user clicks "Yes," proceed with the deletion
+                    window.location.href = '/admin/delete_diet?diet_id=' + dietId;
+                }
+            });
+        });
+    });
+</script>

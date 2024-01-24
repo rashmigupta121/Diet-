@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "AttendanceQuery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+
+    .col-md-2 {
+        margin: 15px;
+    }
+
+    .required-symbol {
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Attendance Query</h1>
+            </div><!-- /.col -->
+            @*<div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Create Task</li>
+                    </ol>
+                </div>*@<!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content bg-gradient-white">
+    <div class="container-fluid">
+
+        <section class="content">
+            @using (Html.BeginForm("AttendanceQuery", "school", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <form>
+                    <br />
+                    @*<div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>&nbsp; Select Date </label>
+                            <input type="date" class="form-control" name="query_date">
+                        </div>
+                    </div>*@
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label> <span class="required-symbol">*</span> Write Your Query </label>
+                            <textarea type="text" class="form-control" cols="2" rows="8" name="query" required>
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <div class="form_button_box col-md-6">
+                        <button type="submit" class="btn btn-success">Send</button>
+                    </div>
+                </form>
+            }
+        </section>
+
+        <!-- Main row -->
+    </div>
+    <!--/. container-fluid -->
+</section>
+
+
+<script src="~/assets/js/jquery-ui.js"></script>
+
+<script type="text/javascript">
+
+        @if(TempData["Message"] != null) {<text >
+            $(document).ready(function () {
+
+                $(document).ready(function()
+                {
+                    @*var tt = @TempData["para"];*@
+                    var tt = @Html.Raw(Json.Encode(TempData["para"]));
+                    console.log(tt);
+                    if (tt === "true") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Success",
+                            text: "@TempData["Message"]",
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: "@TempData["Message"]",
+                        });
+                    }
+                });
+            }); </text>
+        }
+</script>
+
+
+
+
+
+

@@ -1,0 +1,122 @@
+﻿@model List<Diet_Project1.Models.college>
+
+@{
+    ViewBag.Title = "Diet-CollegeList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">College List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="filterdiv">
+                                @using (Html.BeginForm("college_pdfdownload", "diet", FormMethod.Post))
+                                {
+                                    @*<input type="hidden" id="BookCtg_Name" name="BookCtg_Name" value='@TempData["BookCtg_Name"]' />*@
+
+                                    <button id="btnpdf">Pdf</button>
+                                }
+
+                                @using (Html.BeginForm("college_exceldownload", "diet", FormMethod.Post))
+                                {
+                                    @*<input type="hidden" id="BookCtg_Name" name="BookCtg_Name" value='@TempData["BookCtg_Name"]' />*@
+
+                                    <button id="btnexcel">Excel</button>
+                                }
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table id="tbl" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No.</th>
+                                            <th>College Name</th>
+                                            <th>User Name</th>
+                                            <th>Principal Name</th>
+                                            <th>Mobile</th>
+                                            <th>Email</th>
+                                            <th>City</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int serialNumber = 1; // Initialize the serial number counter
+                                        }
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <th>@serialNumber</th>
+                                                <th>@item.college_name</th>
+                                                <td>@item.user_name</td>
+                                                <th>@item.principal_name</th>
+                                                <td>@item.mobile</td>
+                                                <td>@item.email</td>
+                                                <td>@item.city</td>
+
+                                                <td>
+                                                    <a href="/diet/CollegeRegistration?college_id=@(item.college_id)" title="edit"><i class="fas fa-edit" style="color: #28a745"></i></a>
+
+                                                    <a href="#" class="delete-college" data-college-id="@item.college_id" title="delete"><i class="fas fa-regular fa-trash" style="color:red"></i></a>
+
+                                                    <a href="/diet/ViewCollegeDetails?college_id=@(item.college_id)" title="view"><i class="fas fa-regular fa-eye" style="color:orange"></i></a>
+                                                </td>
+                                            </tr>
+                                            { serialNumber++; }// Increment the serial number after each row
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+
+    <script>
+        $(document).ready(function () {
+            // Add a click event handler to the delete button with the class "delete-college"
+            $('.delete-college').click(function (e) {
+                e.preventDefault();
+
+                // Get the college ID from the data attribute
+                var collegeId = $(this).data('college-id');
+
+                // Show a confirmation dialog using Swal
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You won\'t be able to revert this!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If the user clicks "Yes," proceed with the deletion
+                        window.location.href = '/diet/delete_college?college_id=' + collegeId;
+                    }
+                });
+            });
+        });
+    </script>

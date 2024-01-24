@@ -1,0 +1,110 @@
+﻿@model Diet_Project1.Models.college
+
+@{
+    ViewBag.Title = "ViewCollegeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ViewCollegeDetails</h2>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">College List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+    <!-- Content Header (Page header) -->
+    <!-- Main content -->
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="box box-default" style="padding: 15px">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="box box-primary">
+                        <div class="box-body box-profile">
+                            <img class="profile-user-img img-responsive img-circle" src="~/assets/img/Uttar-Pradesh-govt.jpg" alt="User profile picture">
+                            <h3 class="profile-username text-center">@*@Model.CollegeName*@</h3>
+                            <p class="text-muted text-center" title="EnrollmentNo">@*@Model.UserName*@</p>
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item list">
+                                    <i class="fa fa-phone bg-blue FontBig yash" title="Mobile No" aria-hidden="true"></i>
+                                    <b>@*@Model.Mobile*@</b> <a class="pull-right"></a>
+                                </li>
+                                <!-- Add more list items as needed -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#settings" data-toggle="tab">College Profile</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <table class="table">
+                                <tr>
+                                    <th class="college-data">College Name</th>
+                                    <td>@*@Model.CollegeName*@</td>
+                                </tr>
+                                <tr>
+                                    <th class="college-data">Principal Name</th>
+                                    <td>@*@Model.PrincipalName*@</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<style>
+    .content-header > h1 {
+        margin: 0;
+        padding-left: 120px;
+        font-size: 24px;
+    }
+
+    .content-wrapper, .main-footer {
+        -webkit-transition: -webkit-transform .3s ease-in-out,margin .3s ease-in-out;
+        -moz-transition: -moz-transform .3s ease-in-out,margin .3s ease-in-out;
+        -o-transition: -o-transform .3s ease-in-out,margin .3s ease-in-out;
+        transition: transform .3s ease-in-out,margin .3s ease-in-out;
+        margin-left: 115px;
+        z-index: 820;
+    }
+
+    /*td, th {
+        padding: 11px;
+    }*/
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    .college-data {
+        width: 200px;
+    }
+
+    .form-horizontal {
+        padding: 10px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ecf0f5;
+    }
+</style>

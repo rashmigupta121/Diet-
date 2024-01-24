@@ -1,0 +1,179 @@
+﻿@model List<Diet_Project1.Models.internship>
+
+@{
+    ViewBag.Title = "Diet-AppliedStudentList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Applied Student List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-check">
+                                            <input class="form-check-input" id="btnCheck" type="checkbox">
+                                            <label class="form-check-label" for="selectAll">
+                                                Select All
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th>S.No.</th>
+                                    <th>Student Name</th>
+                                    <th>Semester</th>
+                                    <th>School Name</th>
+                                    <th>School Code</th>
+                                    <th>School Catagory</th>
+                                    <th>Block</th>
+                                    <th>Status By College</th>
+                                    <th>Status</th>
+                                    <th>Aproved/Reject</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int serialNumber = 1; // Initialize the serial number counter
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input student-checkbox" type="checkbox" id="studentCheckbox@()" data-student-id="">
+                                            </div>
+                                        </td>
+                                        <th>@serialNumber</th>
+                                        <th>@item.student_name</th>
+                                        <td>@item.semester</td>
+                                        <td>@item.school_name</td>
+                                        <td>@item.school_code</td>
+                                        <td>@item.school_category</td>
+                                        <td>@item.block</td>
+                                        <td>@item.status_by_college</td>
+                                        <td>@item.status</td>
+                                        <td>
+                                            <button title="Approved" style="background-color:white ; color:orange" onclick="showPopup('Approved','@item.user_name')"><i class="fa-solid fa-square-check"></i> </button> &nbsp;
+                                            <button title="Reject" style="background-color:white ; color:green" onclick="showPopup('Reject','@item.user_name')"><i class="fa-solid fa-square-xmark"></i></button>
+                                        </td>
+                                    </tr>
+                                    { serialNumber++; }// Increment the serial number after each row
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmationMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmActionBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    function showPopup(action, user_name) {
+        var confirmationMessage = action === 'Approved' ? 'Do you want to approve this student?' : 'Do you want to reject this student?';
+        $("#confirmationMessage").text(confirmationMessage);
+
+        // Attach click event using jQuery
+        $("#confirmActionBtn").off("click"); // Remove any previous click handlers
+        $("#confirmActionBtn").on("click", function () {
+            if (action === 'Approved') {
+                approvedAction(user_name);
+            } else {
+                rejectAction(user_name);
+            }
+            $("#confirmationModal").modal('hide');
+        });
+
+        $("#confirmationModal").modal('show');
+    }
+
+    function approvedAction(user_name) {
+        updateStatus(user_name, 'Approved');
+    }
+
+    function rejectAction(user_name) {
+        updateStatus(user_name, 'Rejected');
+    }
+
+    function updateStatus(user_name, status) {
+        // Make an AJAX call to update the status in the applied_internship table
+        $.ajax({
+            url: '@Url.Action("UpdateStatus", "diet")',
+            type: 'POST',
+            data: { user_name: user_name, status: status },
+            success: function (data) {
+                // Handle success, if needed
+                if (data.success) {
+                    // If the status is updated successfully, reload the table
+                    reloadTable();
+                }
+            },
+            error: function (error) {
+                console.error('Error updating status:', error);
+            }
+        });
+    }
+
+   function reloadTable() {
+        // Reload the table by fetching the updated data
+        $.ajax({
+            url: '@Url.Action("AppliedStudentList", "diet")',
+            type: 'GET',
+            success: function (data) {
+                // Replace only the tbody content with the updated data
+                $('#tbl tbody').html($(data).find('tbody').html());
+            },
+            error: function (error) {
+                console.error('Error reloading table:', error);
+            }
+        });
+   }
+</script>
+

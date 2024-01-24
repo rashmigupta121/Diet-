@@ -1,0 +1,179 @@
+﻿@{
+    ViewBag.Title = "Admin-Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/css/calender.css" rel="stylesheet" />
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Admin Dashboard</h1>
+            </div><!-- /.col -->
+
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Info boxes -->
+        <div class="row">
+            <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.total_diet</h3>
+
+                        <p>Diet List</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+                    <a href="/admin/DietList" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.total_college</h3>
+
+                        <p>College List</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <a href="/admin/CollegeList" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- /.col -->
+            <!-- ./col -->
+            <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@Model.total_schools</h3>
+
+                        <p>School List</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                    <a href="/admin/SchoolList" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <!--<div class="col-lg-3 col-6">-->
+            <!-- small box -->
+            <!--<div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@Model.total_student</h3>
+
+                        <p>Student List</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                    <a href="/admin/StudentList" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>-->
+            <!-- ./col -->
+            <!-- /.col -->
+        </div>
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-12 connectedSortable">
+                <!-- Custom tabs (Charts with tabs)-->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Welcome
+                        </h3>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="wrapper">
+                            <header class="head">
+                                <p class="current-date"></p>
+                                <div class="icons">
+                                    <span id="prev" class="material-symbols-rounded" style="cursor:pointer"><</span>
+                                    <span id="next" class="material-symbols-rounded" style="cursor:pointer">></span>
+                                </div>
+                            </header>
+                            <div class="calendar">
+                                <ul class="weeks">
+                                    <li>Sun</li>
+                                    <li>Mon</li>
+                                    <li>Tue</li>
+                                    <li>Wed</li>
+                                    <li>Thu</li>
+                                    <li>Fri</li>
+                                    <li>Sat</li>
+                                </ul>
+                                <ul class="days"></ul>
+                            </div>
+                        </div>
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </section>
+            <!-- /.Left col -->
+            <!-- right col (We are only adding the ID to make the widgets sortable)-->
+            <!--<section class="col-lg-5 connectedSortable">-->
+            <!-- Map card -->
+            <!--<div class="card" style="background-color: white">
+                <div class="card-header border-0">-->
+            <!-- /.card-header -->
+            <!--<div class="card-body pt-0">-->
+            <!--The calendar -->
+            <!--<div class="wrapper">
+                    <header class="head">
+                        <p class="current-date"></p>
+                        <div class="icons">
+                            <span id="prev" class="material-symbols-rounded"><</span>
+                            <span id="next" class="material-symbols-rounded">></span>
+                        </div>
+                    </header>
+                    <div class="calendar">
+                        <ul class="weeks">
+                            <li>Sun</li>
+                            <li>Mon</li>
+                            <li>Tue</li>
+                            <li>Wed</li>
+                            <li>Thu</li>
+                            <li>Fri</li>
+                            <li>Sat</li>
+                        </ul>
+                        <ul class="days"></ul>
+                    </div>
+                </div>
+            </div>-->
+            <!-- /.card-body -->
+            <!--</div>
+            </div>-->
+            <!-- /.card -->
+            <!-- Calendar -->
+            <!-- /.card -->
+            <!--</section>-->
+            <!-- right col -->
+        </div>
+
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-md-8">
+                <!-- MAP & BOX PANE -->
+                <!-- /.card -->
+                <!-- /.col -->
+
+            </div>
+            <!-- /.row -->
+        </div><!--/. container-fluid -->
+    </div>
+</section>
+<!-- /.content -->
+<script src="~/assets/js/calender.js"></script>

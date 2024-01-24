@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "ViewAttendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Attendance</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="dropdown">
+                                            <label for="semesterDropdown"></label>
+                                            <select name="semesterFrom" id="semesterDropdown" class="form-control" onchange="filterAttendanceBySemester()">
+                                                <option selected>Select Semester</option>
+                                                <option value="Semester 1">Semester 1</option>
+                                                <option value="Semester 2">Semester 2</option>
+                                                <option value="Semester 3">Semester 3</option>
+                                                <option value="Semester 4">Semester 4</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Date</th>
+                                    <th>Attendance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function filterAttendanceBySemester() {
+        var selectedSemester = document.getElementById("semesterDropdown").value;
+
+        // Use AJAX to fetch attendance data based on the selected semester
+        $.ajax({
+            url: '/student/GetAttendanceData', // Replace with the actual URL that retrieves attendance data
+            type: 'GET',
+            data: { semester: selectedSemester },
+            success: function (data) {
+                // Update the table with the new attendance data
+                updateAttendanceTable(data);
+            },
+            error: function () {
+                alert('Error fetching attendance data.');
+            }
+        });
+    }
+
+    function updateAttendanceTable(data) {
+        var tbody = $('#tbl tbody');
+        tbody.empty(); // Clear existing rows
+
+        $.each(data, function (index, item) {
+            var dateMilliseconds = parseInt(item.date.replace("/Date(", "").replace(")/", ""));
+            var formattedDate = new Date(dateMilliseconds).toLocaleDateString();
+            var row = '<tr>' +
+                '<td>' + (index + 1) + '</td>' +
+                '<td>' + formattedDate + '</td>' +
+                '<td>' + item.attendance + '</td>' +
+                '</tr>';
+            tbody.append(row);
+        });
+        
+    }
+</script>

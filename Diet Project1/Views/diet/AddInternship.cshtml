@@ -1,0 +1,207 @@
+﻿@model Diet_Project1.Models.internship
+
+@{
+    ViewBag.Title = "InernshipDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+
+    .col-md-2 {
+        margin: 15px;
+    }
+
+    .required-symbol {
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Add Internship</h1>
+            </div><!-- /.col -->
+            @*<div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Create Task</li>
+                    </ol>
+                </div>*@<!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content bg-gradient-white">
+    <div class="container-fluid">
+
+        <section class="content">
+            @using (Html.BeginForm("AddInternship", "diet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+             {
+                <form>
+                    <br />
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label> <span class="required-symbol">*</span>Batch</label>
+                            @Html.DropDownList("batch", ViewBag.BatchYears as SelectList, "Select Batch", new { @class = "form-control", @required = "required" })
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label><span class="required-symbol">*</span>Semester</label>
+                            <select name="semester" class="form-control" value="@Model.semester" required>
+                                <option disabled selected>Select Semester</option>
+                                <option value="Semester 1" @(Model.semester == "Semester 1" ? "selected" : "")>Semester 1</option>
+                                <option value="Semester 2" @(Model.semester == "Semester 2" ? "selected" : "")>Semester 2</option>
+                                <option value="Semester 3" @(Model.semester == "Semester 3" ? "selected" : "")>Semester 3</option>
+                                <option value="Semester 4" @(Model.semester == "Semester 4" ? "selected" : "")>Semester 4</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label><span class="required-symbol">*</span>School Category</label>
+
+                            <select name="school_category" class="form-control" required>
+                                <option disabled selected>Select Category</option>-->
+                                <option value="Primary" @(Model.@school_category == "Primary" ? "selected" : "")>Primary</option>
+                                <option value="Secondary" @(Model.@school_category == "Secondary" ? "selected" : "")>Secondary</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Panel Open For Students</label>
+                            <input type="date" class="form-control" name="panel_open" required value="@Model.panel_open">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Apply Before Date</label>
+                            <input type="date" class="form-control" name="apply_date" required value="@Model.apply_date">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Internship Start Date</label>
+                            <input type="date" class="form-control" name="start_date" required value="@Model.start_date">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>Internship End Date</label>
+                            <input type="date" class="form-control" name="end_date" required value="@Model.end_date">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label><span class="required-symbol">*</span>School Capacity</label>
+                            <input type="text" class="form-control numeric-only" placeholder="0" name="school_capacity" required autocomplete="off" value="@Model.school_capacity">
+                        </div>
+                    </div>
+
+                    <div class="form_button_box">
+                        <input type="hidden" name="internship_id" id="internship_id" value="@Model.internship_id" />
+                        @if (Model.internship_id != 0)
+                        {
+                            <button type="submit" class="btn btn-success">Update</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        }
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                    </div>
+                </form>
+             }
+        </section>
+
+        <!-- Main row -->
+    </div>
+    <!--/. container-fluid -->
+</section>
+
+<script src="~/assets/js/jquery-ui.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to allow only numeric input
+        $(".numeric-only").on("input", function () {
+            this.value = this.value.replace(/[^\d]/g, '');
+        });
+
+        // Function to limit the length to 10 digits and show error message
+        $(".limit-10-digits").on("input", function () {
+            var inputValue = this.value;
+            var errorMessage = $("#mobile-error-message");
+
+            if (inputValue.length > 10) {
+                this.value = inputValue.slice(0, 10);
+                errorMessage.text(""); // Clear the error message
+            } else if (inputValue.length < 10) {
+                // You can customize the error message here
+                errorMessage.text("Mobile number must be 10 digits.");
+            } else {
+                errorMessage.text(""); // Clear the error message
+            }
+        });
+
+        $("form").submit(function (e) {
+            // Trim leading and trailing spaces in all text and textarea input fields
+            $(this).find(":input").each(function () {
+                if ($(this).is("input[type='text']") || $(this).is("textarea")) {
+                    var trimmedValue = $(this).val().trim();
+                    $(this).val(trimmedValue);
+
+                    // Validate against blank spaces using the browser's native checkValidity
+                    if (!this.checkValidity()) {
+                        e.preventDefault(); // Prevent form submission
+                        // Display a custom error message
+                        alert("Input cannot start or end with a space!! Please enter correctly");
+                        return false;
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+@* Dropify *@
+<script>
+    $('.dropify').dropify();
+
+</script>
+
+<script type="text/javascript">
+
+        @if(TempData["Message"] != null) {<text >
+            $(document).ready(function () {
+
+                $(document).ready(function()
+                {
+                    @*var tt = @TempData["para"];*@
+                    var tt = @Html.Raw(Json.Encode(TempData["para"]));
+                    console.log(tt);
+                    if (tt === "true") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Success",
+                            text: "@TempData["Message"]",
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: "@TempData["Message"]",
+                        });
+                    }
+                });
+            }); </text>
+        }
+</script>
+

@@ -1,0 +1,117 @@
+﻿.head {
+    display: flex;
+    align-items: center;
+    padding: 25px 30px 10px;
+    justify-content: space-between;
+}
+
+head .icons {
+    display: flex;
+    flex-direction: column; /* Change to column */
+    align-items: center; /* Add this */
+}
+
+    head .icons span {
+        height: 38px;
+        width: 38px;
+        margin: 0 1px;
+        cursor: pointer;
+        color: #878787;
+        text-align: center;
+        line-height: 38px;
+        font-size: 1.9rem;
+        user-select: none;
+        border-radius: 50%;
+    }
+
+.icons span:last-child {
+    margin-top: 10px; /* Adjust spacing between icons */
+}
+
+.calendar {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .calendar ul.weeks {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        justify-content: space-around; /* Add this */
+        width: 100%; /* Add this */
+    }
+
+    .calendar .weeks li {
+        font-weight: 500;
+        cursor: default;
+        width: calc(100% / 7); /* Add this */
+        text-align: center; /* Add this */
+    }
+
+    .calendar ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        text-align: center;
+    }
+
+        .calendar ul.days {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: space-around; /* Add this */
+            width: 100%; /* Add this */
+        }
+
+    .calendar .days {
+        margin-bottom: 20px;
+    }
+
+    .calendar li {
+        color: #333;
+        width: calc(100% / 7);
+        font-size: 1.07rem;
+        margin-top: 5px; /* Adjust spacing between days */
+    }
+
+    .calendar .days li {
+        z-index: 1;
+        cursor: pointer;
+        position: relative;
+        margin-top: 10px; /* Adjust spacing between days */
+    }
+
+.days li.inactive {
+    color: #aaa;
+}
+
+.days li.active {
+    color: #fff;
+}
+
+.days li::before {
+    position: absolute;
+    content: "";
+    left: 50%;
+    top: 50%;
+    height: 40px;
+    width: 40px;
+    z-index: -1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.days li.active::before {
+    background: #9B59B6;
+}
+
+.days li:not(.active):hover::before {
+    background: #f2f2f2;
+}
+
+

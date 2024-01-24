@@ -1,0 +1,84 @@
+﻿@model List<Diet_Project1.Models.college>
+
+@{
+    ViewBag.Title = "Admin-CollegeList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">College List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <!--<div class="filterdiv">-->
+                            @*@using (Html.BeginForm("college_pdfdownload", "diet", FormMethod.Post))
+                            {*@
+                                @*<input type="hidden" id="BookCtg_Name" name="BookCtg_Name" value='@TempData["BookCtg_Name"]' />*@
+
+                                @*<button id="btnpdf">Pdf</button>
+                            }*@
+
+                            @*@using (Html.BeginForm("college_exceldownload", "diet", FormMethod.Post))
+                            {*@
+                                @*<input type="hidden" id="BookCtg_Name" name="BookCtg_Name" value='@TempData["BookCtg_Name"]' />*@
+
+                                @*<button id="btnexcel">Excel</button>
+                            }*@
+                        <!--</div>-->
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>College Name</th>
+                                    <th>User Name</th>
+                                    <th>Principal Name</th>
+                                    <th>Mobile</th>
+                                    <th>Email</th>
+                                    <th>City</th>
+                                    <th>Diet Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <th>@item.college_name</th>
+                                        <td>@item.user_name</td>
+                                        <th>@item.principal_name</th>
+                                        <td>@item.mobile</td>
+                                        <td>@item.email</td>
+                                        <td>@item.city</td>
+                                        <td>@item.diet_name</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->

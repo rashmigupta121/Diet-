@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Admin-StudentList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/assets/css/styleSheet1.css" rel="stylesheet" />
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Student List</h1>
+            </div><!-- /.col -->
+            <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <table id="tbl" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>User Name</th>
+                                    <th>Password</th>
+                                    <td>Batch</td>
+                                    <th>Mobile No.</th>
+                                    <td>City</td>
+                                    <th>Image</th>
+                                    @*<th></th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <th>@item.name</th>
+                                        <td>@item.user_name</td>
+                                        <td>@item.password</td>
+                                        <td>@item.batch</td>
+                                        <th>@item.mobile</th>
+                                        <td>@item.city</td>
+                                        <th><img src="@item.student_image" style="height:50px; width:80px;" /></th>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->

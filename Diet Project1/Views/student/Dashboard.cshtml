@@ -1,0 +1,249 @@
+﻿@model List<Diet_Project1.Models.internship>
+@{
+    ViewBag.Title = "Student-Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/css/calender.css" rel="stylesheet" />
+<style>
+    #popupModal {
+        display: none; /* Hide the modal by default */
+    }
+
+    .modal-dialog {
+        max-width: 800px; /* Adjust the maximum width of the modal */
+    }
+
+    .modal-content {
+        border-radius: 10px; /* Rounded corners for the modal */
+    }
+
+    .modal-header {
+        background-color: #007bff; /* Header background color */
+        color: #fff; /* Header text color */
+    }
+
+    .modal-body {
+        padding: 20px; /* Padding for the modal body */
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0; /* Remove bottom margin for the table */
+    }
+
+    .modal-footer {
+        justify-content: center; /* Center the footer buttons */
+        border-top: 1px solid #dee2e6; /* Border at the top of the footer */
+        padding: 15px; /* Padding for the footer */
+    }
+
+    /* Optional: Add styling for the close button */
+    .btn-close {
+        color: #fff; /* Close button color */
+    }
+
+    /* Optional: Style the primary button */
+    .btn-primary {
+        background-color: #007bff; /* Primary button background color */
+        border-color: #007bff; /* Primary button border color */
+    }
+</style>
+
+<div class="modal fade" id="popupModal" tabindex="-1" aria-labelledby="popupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="popupModalLabel">Welcome to the Dashboard!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your popup content here -->
+                <p>This is your first time on the dashboard. Enjoy exploring!</p>
+
+                <table class="table" id="userDataTable">
+                    <thead>
+                        <tr>
+                            <th>Batch</th>
+                            <th>Semester</th>
+                            <th>School Category</th>
+                            <th>Panel Open For Student</th>
+                            <th>Internship Apply Date</th>
+                            <th>Internship Start Date</th>
+                            <th>Internship End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="okButton">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1 class="m-0">Dashboard</h1>
+            </div><!-- /.col -->
+
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Info boxes -->
+        <div class="row">
+            <div class="col-lg-12 col-12">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>
+                           @if (Session["Name"] != null)
+                            {
+                                @Session["Name"].ToString();
+                            }
+                        </h3>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+                    <a href="#" class="small-box-footer"> </a>
+                </div>
+            </div>
+          
+        </div>
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-12 connectedSortable">
+                <!-- Custom tabs (Charts with tabs)-->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Welcome
+                        </h3>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="wrapper">
+                            <header class="head">
+                                <p class="current-date"></p>
+                                <div class="icons">
+                                    <span id="prev" class="material-symbols-rounded" style="cursor:pointer"><</span>
+                                    <span id="next" class="material-symbols-rounded" style="cursor:pointer">></span>
+                                </div>
+                            </header>
+                            <div class="calendar">
+                                <ul class="weeks">
+                                    <li>Sun</li>
+                                    <li>Mon</li>
+                                    <li>Tue</li>
+                                    <li>Wed</li>
+                                    <li>Thu</li>
+                                    <li>Fri</li>
+                                    <li>Sat</li>
+                                </ul>
+                                <ul class="days"></ul>
+                            </div>
+                        </div>
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- /.card -->
+            </section>
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+
+
+<script src="~/assets/js/calender.js"></script>
+<script>
+    var myModal; // Declare myModal outside the event listener
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the user-specific identifier (you can use the user's ID or any unique identifier)
+        var userId = '@Session["username"]'; // Replace this with the actual identifier
+
+        // Fetch data using AJAX
+        $.ajax({
+            url: '@Url.Action("getInternshipDetails", "student")',
+            type: 'Post',
+            data: {},
+            success: function (data) {
+                var currentDate = new Date(); // Get the current date
+                console.log('Current Date:', currentDate);
+
+                // Iterate through the data and check apply_date and panel_open
+                data.forEach(function (item) {
+                    var applyDate = new Date(item.apply_date);
+                    var panelOpenDate = new Date(item.panel_open);
+
+                    console.log('Apply Date:', applyDate);
+                    console.log('Panel Open Date:', panelOpenDate);
+
+                    // Check if the current date is greater than or equal to apply_date or panel_open
+                    if (currentDate >= panelOpenDate && currentDate <= applyDate) {
+                        console.log('Showing Popup!');
+                        // Show the popup
+                        myModal = new bootstrap.Modal(document.getElementById('popupModal'));
+                        myModal.show();
+
+                        // Populate table data
+                        var tbody = $('#userDataTable tbody');
+                        var row = '<tr>' +
+                            '<td>' + item.batch + '</td>' +
+                            '<td>' + item.semester + '</td>' +
+                            '<td>' + item.school_category + '</td>' +
+                            '<td>' + item.panel_open + '</td>' +
+                            '<td>' + item.apply_date + '</td>' +
+                            '<td>' + item.start_date + '</td>' +
+                            '<td>' + item.end_date + '</td>' +
+                            '</tr>';
+                        tbody.append(row);
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', error); // Log any errors for debugging
+            }
+        });
+
+        // Add click event listener to the OK button
+        $('#okButton').on('click', function () {
+            // Close the modal
+            myModal.hide();
+
+             // Insert data using AJAX
+            var dataToInsert = {
+                // Add any additional data you want to insert
+                semester: $('#userDataTable tbody tr td:nth-child(2)').text(),
+                panel_open: $('#userDataTable tbody tr td:nth-child(4)').text(),
+                apply_date: $('#userDataTable tbody tr td:nth-child(5)').text(),
+                // Add more fields as needed
+            };
+            console.log('Data to Insert:', dataToInsert);
+            $.ajax({
+                url: '@Url.Action("popup_status", "student")', // Replace with your actual controller action
+                type: 'POST',
+                data: dataToInsert,
+                success: function (result) {
+                    console.log('Data inserted successfully:', result);
+                    // You can add any additional actions after data insertion if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error during data insertion:', error);
+                }
+            });
+        });
+    });
+</script>
+
+
